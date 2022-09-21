@@ -1,5 +1,6 @@
 package org.dodo;
 
+import org.dodo.model.Course;
 import org.dodo.model.Student;
 import org.dodo.model.Subject;
 
@@ -10,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
-@Path("registration")
+@Path("students")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -36,10 +37,10 @@ public class StudentsResource {
     public Student createData(Student student){
         Student.persist(student);
 
-        List<Subject> subjects = student.subject;
+        List<Subject> subjects = student.getSubject();
         if(student.isPersistent()){
             for(Subject subject : subjects) {
-                subject.student = student;
+                subject.setStudent(student);
                 subject.persist();
             }
         }

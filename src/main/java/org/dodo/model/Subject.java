@@ -27,11 +27,15 @@ public class Subject extends PanacheEntityBase {
     public Boolean passed = true;
     @ManyToOne
     @JoinColumn(name = "student_uuid", referencedColumnName = "uuid")
-    public Student student;
+    private Student student;
 
     @JsonIgnore
     public Student getStudent() {
         return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Boolean getPassed() {
@@ -40,4 +44,5 @@ public class Subject extends PanacheEntityBase {
         }
         return passed;
     }
+
 }

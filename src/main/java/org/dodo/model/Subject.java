@@ -1,5 +1,6 @@
 package org.dodo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -11,66 +12,32 @@ import java.util.UUID;
 public class Subject extends PanacheEntityBase {
 
     @Id
-    @Column(insertable = false, name = "subject_uuid")
+    @Column(insertable = false, name = "uuid")
     @Schema(readOnly = true)
     @GeneratedValue
-    private UUID uuid;
+    public UUID uuid;
     @Column(name = "subject_name")
     @Schema(example = "Math")
-    private String subjectName;
+    public String subjectName;
     @Column(name = "point")
     @Schema(example = "85")
-    private Double point;
+    public Double point;
     @Column(name = "passed")
-    @Schema(example = "true")
-    private Boolean passed;
-    @OneToOne(mappedBy = "subject")
-    private Student student;
+    @Schema(example = "true", readOnly = true)
+    public Boolean passed = true;
+    @ManyToOne
+    @JoinColumn(name = "student_uuid", referencedColumnName = "uuid")
+    public Student student;
 
-    public Subject() {
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public Double getPoint() {
-        return point;
-    }
-
-    public void setPoint(Double point) {
-        this.point = point;
-    }
-
-    public Boolean getPassed() {
-        return passed;
-    }
-
-    public void setPassed(Integer point) {
-        if(point >= 70) {
-            this.passed = true;
-        } else{
-            this.passed = false;
-        }
-    }
-
+    @JsonIgnore
     public Student getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public Boolean getPassed() {
+        if(point < 75) {
+            return passed = false;
+        }
+        return passed;
     }
 }

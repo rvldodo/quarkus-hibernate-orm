@@ -4,105 +4,40 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "students")
 public class Student extends PanacheEntityBase {
+
     @Id
-    @Column(insertable = false)
+    @Column(insertable = false, name = "uuid")
     @Schema(readOnly = true)
     @GeneratedValue
-    private UUID uuid;
+    public UUID uuid;
     @Column(name = "first_name")
     @Schema(example = "Rivaldo")
-    private String firstName;
+    public String firstName;
     @Column(name = "last_name")
     @Schema(example = "Lawalata")
-    private String lastName;
+    public String lastName;
     @Column(nullable = false)
     @Schema(example = "21")
-    private Integer age;
+    public Integer age;
     @Column(nullable = false)
     @Schema(example = "Software Engineer")
-    private String major;
+    public String major;
     @Column(nullable = false)
     @Schema(example = "Kazan Aviation Institute")
-    private String university;
+    public String university;
     @Column(name = "start_study")
     @Schema(example = "2020")
-    private Integer yearStartStudy;
+    public Integer yearStartStudy;
     @Column(name = "finish_study")
     @Schema(example = "2024")
-    private Integer yearFinishStudy;
+    public Integer yearFinishStudy;
+    @OneToMany(mappedBy = "student")
+    public List<Subject> subject;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_uuid")
-    private Subject subject;
-
-    public Student() {
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-
-    public void setMajor(String major) {
-        this.major = major;
-    }
-
-    public String getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(String university) {
-        this.university = university;
-    }
-
-    public Integer getYearStartStudy() {
-        return yearStartStudy;
-    }
-
-    public void setYearStartStudy(Integer yearStartStudy) {
-        this.yearStartStudy = yearStartStudy;
-    }
-
-    public Integer getYearFinishStudy() {
-        return yearFinishStudy;
-    }
-
-    public void setYearFinishStudy(Integer yearFinishStudy) {
-        this.yearFinishStudy = yearFinishStudy;
-    }
 }

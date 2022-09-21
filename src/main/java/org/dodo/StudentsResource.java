@@ -1,25 +1,26 @@
 package org.dodo;
 
 import org.dodo.model.Student;
+import org.dodo.model.Subject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URI;
 import java.util.*;
 
-@Path("orm")
+@Path("registration")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class StudentsResource {
 
     @GET
-    public Response getAll() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Student> getAll() {
         List<Student> students = Student.listAll();
-        return Response.ok(students).build();
+        return students;
     }
 
     @GET
@@ -32,13 +33,19 @@ public class StudentsResource {
 
     @POST
     @Transactional
-    public Response createData(Student student){
+    public Student createData(Student student){
         Student.persist(student);
+
+        List<Subject> subjects = student.subject;
         if(student.isPersistent()){
-            return Response.created(URI.create("/students" + student.getUuid())).build();
+            for(Subject subject : subjects) {
+                subject.student = student;
+                subject.persist();
+            }
         }
-        return Response.status(Response.Status.BAD_REQUEST).build();
+        return student;
     }
+
 
     @DELETE
     @Path("{uuid}")

@@ -19,6 +19,13 @@ public class CourseResource {
     @Inject
     EntityManager entityManager;
 
+    @GET
+    public List<Course> getAll(){
+        List<Course> courses = entityManager.createQuery("select c from Course c", Course.class).getResultList();
+
+        return courses;
+    }
+
     @POST
     @Path("{uuid}")
     @Transactional

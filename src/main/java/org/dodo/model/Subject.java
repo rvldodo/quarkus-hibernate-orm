@@ -22,11 +22,9 @@ public class Subject extends PanacheEntityBase {
     @Column(name = "point")
     @Schema(example = "85")
     public Double point;
-    @Column(name = "passed")
-    @Schema(example = "true", readOnly = true)
-    public Boolean passed = true;
     @ManyToOne
     @JoinColumn(name = "student_uuid", referencedColumnName = "uuid")
+    @Schema(readOnly = true)
     private Student student;
 
     @JsonIgnore
@@ -38,11 +36,13 @@ public class Subject extends PanacheEntityBase {
         this.student = student;
     }
 
-    public Boolean getPassed() {
-        if(point < 75) {
-            return passed = false;
+    @Column(name = "passed")
+    @Schema(readOnly = true)
+    public Boolean isPassed() {
+        if (this.point < 75) {
+            return false;
         }
-        return passed;
+        return true;
     }
 
 }

@@ -19,5 +19,4 @@ public class Course extends PanacheEntityBase {
     @Schema(example = "Jonas Schmedtmann")
     @Column(name = "instructor")
     public String instructor;
-
 }

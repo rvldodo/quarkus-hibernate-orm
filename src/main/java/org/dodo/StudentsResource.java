@@ -3,6 +3,7 @@ package org.dodo;
 import org.dodo.model.Course;
 import org.dodo.model.Student;
 import org.dodo.model.Subject;
+import org.dodo.templateRespon.ResponTemplate;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -19,9 +20,16 @@ public class StudentsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Student> getAll() {
+    public Response getAll() {
         List<Student> students = Student.listAll();
-        return students;
+        if(students.isEmpty()) {
+            ResponTemplate respon =  new ResponTemplate(404, "NOT FOUND", students);
+            return Response.status(404).entity(respon).build();
+
+        }
+        ResponTemplate respon = new ResponTemplate(200, "SUCCESS", students);
+
+        return Response.ok(respon).build();
     }
 
     @GET
